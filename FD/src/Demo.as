@@ -1,0 +1,470 @@
+package
+{
+	import flash.desktop.NativeApplication;
+	import flash.desktop.SystemIdleMode;
+	import flash.display.BitmapData;
+	import flash.display.Sprite;
+	import flash.display.StageAlign;
+	import flash.display.StageOrientation;
+	import flash.display.StageScaleMode;
+	import flash.events.Event;
+	import flash.events.MouseEvent;
+	import flash.events.StageOrientationEvent;
+	import flash.events.StatusEvent;
+	import flash.display.LoaderInfo;
+	import flash.system.LoaderContext;
+	import flash.text.AntiAliasType;
+	import flash.text.AutoCapitalize;
+	import flash.text.TextField;
+	import flash.text.TextFieldAutoSize;
+	import flash.text.TextFormat;
+	import flash.text.TextFormatAlign;
+	import flash.ui.Multitouch;
+	import flash.ui.MultitouchInputMode;
+	import flash.ui.Keyboard;
+	import flash.events.KeyboardEvent;
+	import flash.events.InvokeEvent;
+	import flash.filesystem.File;
+	import flash.utils.ByteArray;
+	import flash.media.Sound;
+    import flash.media.SoundChannel;
+	import flash.net.URLLoader;
+	import flash.display.Loader;
+	import com.doitflash.text.modules.MySprite;
+	import com.doitflash.starling.utils.list.List;
+	import com.doitflash.consts.Direction;
+	import com.doitflash.consts.Orientation;
+	import com.doitflash.consts.Easing;
+	import flash.utils.Endian;
+	import com.luaye.console.C;
+	import com.doitflash.mobileProject.commonCpuSrc.DeviceInfo;
+	import flash.utils.setTimeout;
+	
+	import com.doitflash.air.extensions.player.surface.SurfacePlayer;
+	import com.doitflash.air.extensions.player.surface.SurfacePlayerEvent;
+	import com.doitflash.air.extensions.player.surface.DeviceOrientationType;
+	
+	/**
+	 * ...
+	 * @author Hadi Tavakoli - 4/28/2015 8:57 AM
+	 */
+	public class Demo extends Sprite
+	{
+		private var _ex:SurfacePlayer;
+		
+		private const BTN_WIDTH:Number = 110;
+		private const BTN_HEIGHT:Number = 60;
+		private const BTN_SPACE:Number = 2;
+		private var _txt:TextField;
+		private var _body:Sprite;
+		private var _list:List;
+		private var _numRows:int = 1;
+		
+		public function Demo():void
+		{
+			Multitouch.inputMode = MultitouchInputMode.GESTURE;
+			NativeApplication.nativeApplication.addEventListener(Event.ACTIVATE, handleActivate, false, 0, true);
+			NativeApplication.nativeApplication.addEventListener(Event.DEACTIVATE, handleDeactivate, false, 0, true);
+			NativeApplication.nativeApplication.addEventListener(InvokeEvent.INVOKE, onInvoke, false, 0, true);
+			NativeApplication.nativeApplication.addEventListener(KeyboardEvent.KEY_DOWN, handleKeys, false, 0, true);
+			
+			stage.addEventListener(Event.RESIZE, onResize);
+			stage.scaleMode = StageScaleMode.NO_SCALE;
+			stage.align = StageAlign.TOP_LEFT;
+			
+			C.startOnStage(this, "`");
+			C.commandLine = false;
+			C.commandLineAllowed = false;
+			C.x = 100;
+			C.width = 500;
+			C.height = 250;
+			C.strongRef = true;
+			C.visible = false;
+			C.scaleX = C.scaleY = DeviceInfo.dpiScaleMultiplier;
+			
+			_txt = new TextField();
+			_txt.autoSize = TextFieldAutoSize.LEFT;
+			_txt.antiAliasType = AntiAliasType.ADVANCED;
+			_txt.multiline = true;
+			_txt.wordWrap = true;
+			_txt.embedFonts = false;
+			_txt.htmlText = "<font face='Arimo' color='#333333' size='20'><b>Surface video player V" + SurfacePlayer.VERSION + " for Adobe Air</b></font>";
+			_txt.scaleX = _txt.scaleY = DeviceInfo.dpiScaleMultiplier;
+			this.addChild(_txt);
+			
+			_body = new Sprite();
+			this.addChild(_body);
+			
+			_list = new List();
+			_list.holder = _body;
+			_list.itemsHolder = new Sprite();
+			_list.orientation = Orientation.VERTICAL;
+			_list.hDirection = Direction.LEFT_TO_RIGHT;
+			_list.vDirection = Direction.TOP_TO_BOTTOM;
+			_list.space = BTN_SPACE;
+			
+			init();
+			onResize();
+		}
+		
+		private function onInvoke(e:InvokeEvent):void
+		{
+			NativeApplication.nativeApplication.removeEventListener(InvokeEvent.INVOKE, onInvoke);
+		}
+		
+		private function handleActivate(e:Event):void
+		{
+			NativeApplication.nativeApplication.systemIdleMode = SystemIdleMode.KEEP_AWAKE;
+		}
+		
+		private function handleDeactivate(e:Event):void
+		{
+			NativeApplication.nativeApplication.systemIdleMode = SystemIdleMode.NORMAL;
+		}
+		
+		private function handleKeys(e:KeyboardEvent):void
+		{
+			if (e.keyCode == Keyboard.BACK)
+			{
+				e.preventDefault();
+				
+				// when closing the app, we'll dispose the extension also
+				if (_ex) _ex.dispose();
+				
+				NativeApplication.nativeApplication.exit();
+			}
+		}
+		
+		private function onResize(e:*=null):void
+		{
+			if (_txt)
+			{
+				_txt.width = stage.stageWidth * (1 / DeviceInfo.dpiScaleMultiplier);
+				
+				C.x = 0;
+				C.y = _txt.y + _txt.height + 0;
+				C.width = stage.stageWidth * (1 / DeviceInfo.dpiScaleMultiplier);
+				C.height = 300 * (1 / DeviceInfo.dpiScaleMultiplier);
+			}
+			
+			if (_list)
+			{
+				_numRows = Math.floor(stage.stageWidth / (BTN_WIDTH * DeviceInfo.dpiScaleMultiplier + BTN_SPACE));
+				_list.row = _numRows;
+				_list.itemArrange();
+			}
+			
+			if (_body)
+			{
+				_body.y = stage.stageHeight - _body.height;
+			}
+			
+			
+			if (_ex)
+			{
+				if (!_ex.isFullscreen) // do resizing only when we are NOT in fullscreen mode
+				{
+					var w:int = stage.stageWidth * 0.5;
+					var h:int = w * 0.75;
+					var x:int = w * 0.5;
+					var y:int = 50;
+					
+					_ex.setPosition(x, y, w, h, true); // ratio can be true or false
+				}
+			}
+		}
+		
+		private function init():void
+		{
+			// initialize the extension
+			_ex = new SurfacePlayer();
+			_ex.addEventListener(SurfacePlayerEvent.ON_BACK_CLICKED, onBackClickedWhenSurfacePlayerIsAvailable);
+			_ex.addEventListener(SurfacePlayerEvent.ON_FULLSCREEN_STATE, onFullscreenStateChanged);
+			_ex.addEventListener(SurfacePlayerEvent.ON_COMPLETION_LISTENER, onVideoPlaybackCompleted);
+			_ex.addEventListener(SurfacePlayerEvent.ON_FILE_AVAILABILITY, onTargetVideoAvailability);
+			_ex.addEventListener(SurfacePlayerEvent.ON_MEDIA_STATUS_CHANGED, onMediaStatusChanged);
+			_ex.addEventListener(SurfacePlayerEvent.ON_ERROR, onError);
+			_ex.addEventListener(SurfacePlayerEvent.ON_INFO_LISTENER, onMediaInfo);
+			
+			// copy test video to sdcard
+			var src:File = File.applicationDirectory.resolvePath("testVideoPlayerSurface.mp4");
+			var dis:File = File.documentsDirectory.resolvePath("testVideoPlayerSurface.mp4");
+			if (!dis.exists) src.copyTo(dis);
+			
+			trace("a demo video is copied to sdcard so we can play it back!");
+			trace("get Android SDK Version: " + _ex.androidVersion);
+			
+			var w:int = stage.stageWidth * 0.5;
+			var h:int = w * 0.75;
+			var x:int = w * 0.5;
+			var y:int = 50;
+			_ex.init(x, y, w, h, true); // ratio can be true or false (you can change the position and dimension later using the setPosition command)
+			
+			var file:File = File.documentsDirectory.resolvePath("testVideoPlayerSurface.mp4"); // you can play videos on your sdcard
+			_ex.attachVideo(file);
+			
+			// create the dragMe button!
+			var dragMe:MySprite = new MySprite();
+			dragMe.addEventListener(MouseEvent.MOUSE_DOWN, onDown);
+			dragMe.width = 100;
+			dragMe.height = 100;
+			dragMe.bgColor = 0xFF9900;
+			dragMe.bgAlpha = 1;
+			dragMe.bgBottomLeftRadius = 10;
+			dragMe.bgBottomRightRadius = 10;
+			dragMe.bgTopRightRadius = 10;
+			dragMe.drawBg();
+			dragMe.x = x + w;
+			dragMe.y = y + h;
+			
+			var dragtxt:TextField = new TextField();
+			dragtxt.selectable = false;
+			dragtxt.mouseEnabled = false;
+			dragtxt.autoSize = TextFieldAutoSize.LEFT;
+			dragtxt.wordWrap = true;
+			dragtxt.multiline = true;
+			dragtxt.htmlText = "<p align='center'><font size='23'>DRAG ME</font></p>";
+			dragtxt.width = dragMe.width;
+			dragtxt.y = dragMe.height - dragtxt.height >> 1;
+			dragMe.addChild(dragtxt);
+			
+			this.addChild(dragMe);
+			
+			function onDown(e:MouseEvent):void
+			{
+				dragMe.addEventListener(MouseEvent.MOUSE_MOVE, onMove);
+				stage.addEventListener(MouseEvent.MOUSE_UP, onUp);
+				dragMe.startDrag();
+			}
+			
+			function onMove(e:MouseEvent):void
+			{
+				_ex.setPosition(dragMe.x - w, dragMe.y - h, w, h, true);
+			}
+			
+			function onUp(e:MouseEvent):void
+			{
+				dragMe.removeEventListener(MouseEvent.MOUSE_MOVE, onMove);
+				stage.removeEventListener(MouseEvent.MOUSE_UP, onUp);
+				dragMe.stopDrag();
+			}
+			
+			
+			/*var btn02:MySprite = createBtn("detachVideo!");
+			btn02.addEventListener(MouseEvent.CLICK, detachVideo);
+			_list.add(btn02);
+			
+			function detachVideo(e:MouseEvent):void
+			{
+				_ex.detachVideo();
+			}*/
+			
+			var btn3:MySprite = createBtn("play");
+			btn3.addEventListener(MouseEvent.CLICK, play);
+			_list.add(btn3);
+			
+			function play(e:MouseEvent):void
+			{
+				_ex.play();
+			}
+			
+			var btn5:MySprite = createBtn("pause");
+			btn5.addEventListener(MouseEvent.CLICK, pause);
+			_list.add(btn5);
+			
+			function pause(e:MouseEvent):void
+			{
+				_ex.pause();
+				trace("pause at: " + _ex.position);
+				trace("total length: " + _ex.duration);
+			}
+			
+			var btn6:MySprite = createBtn("stop");
+			btn6.addEventListener(MouseEvent.CLICK, stop);
+			_list.add(btn6);
+			
+			function stop(e:MouseEvent):void
+			{
+				_ex.stop()
+			}
+			
+			var btn7:MySprite = createBtn("seekTo (18619) miliSeconds");
+			btn7.addEventListener(MouseEvent.CLICK, seekTo);
+			_list.add(btn7);
+			
+			function seekTo(e:MouseEvent):void
+			{
+				_ex.seekTo(18619);
+			}
+			
+			// NOTICE: to go fullscreen, we recommond using this extension: http://myappsnippet.com/video-player-native-extension/
+			
+			/*var btn8:MySprite = createBtn("go fullscreen");
+			btn8.addEventListener(MouseEvent.CLICK, goFullscreen);
+			_list.add(btn8);
+			
+			function goFullscreen(e:MouseEvent):void
+			{
+				_ex.goFullscreen(true);
+			}
+			
+			var btn9:MySprite = createBtn("go normalscreen");
+			btn9.addEventListener(MouseEvent.CLICK, goNormalscreen);
+			_list.add(btn9);
+			
+			function goNormalscreen(e:MouseEvent):void
+			{
+				_ex.goFullscreen(false);
+			}*/
+			
+			/*var btn10:MySprite = createBtn("is playing?");
+			btn10.addEventListener(MouseEvent.CLICK, isPlaying);
+			_list.add(btn10);
+			
+			function isPlaying(e:MouseEvent):void
+			{
+				trace("is playing? " + _ex.isPlaying);
+			}*/
+			
+			var btn11:MySprite = createBtn("decrease volume");
+			btn11.addEventListener(MouseEvent.CLICK, setVolumeLow);
+			_list.add(btn11);
+			
+			function setVolumeLow(e:MouseEvent):void
+			{
+				_ex.volume = 5; // set volume range = 0, 100
+				trace("volume = " + _ex.volume);
+			}
+			
+			var btn12:MySprite = createBtn("increase volume");
+			btn12.addEventListener(MouseEvent.CLICK, setVolumeHigh);
+			_list.add(btn12);
+			
+			function setVolumeHigh(e:MouseEvent):void
+			{
+				_ex.volume = 100; // set volume range = 0, 100
+				trace("volume = " + _ex.volume);
+			}
+		}
+		
+		private function onBackClickedWhenSurfacePlayerIsAvailable(e:SurfacePlayerEvent):void
+		{
+			_ex.dispose();
+			NativeApplication.nativeApplication.exit();
+		}
+		
+		private function onFullscreenStateChanged(e:SurfacePlayerEvent):void
+		{
+			if (e.param) // means that the state is in fullscreen
+			{
+				// when going to fullscreen, you should stop your app from autoOrients
+				stage.autoOrients = false;
+				
+				// most devices are portraite by default and you can rotate it manually with no problem. on the other hand, 
+				// tablet devices are landscape by default which make the big problem so, we have fixed the problem inside the ANE exclusively
+				if (_ex.naturalOrientation == DeviceOrientationType.PORTRAITE)
+				{
+					stage.setOrientation(StageOrientation.ROTATED_RIGHT);
+				}
+			}
+			else
+			{
+				// depending on your app design, you can set the orientation to whatever suits you!
+				stage.autoOrients = false;
+			}
+		}
+		
+		private function onVideoPlaybackCompleted(e:SurfacePlayerEvent):void
+		{
+			trace("video playback finished");
+			
+			if (_ex.isFullscreen)
+			{
+				_ex.goFullscreen(false);
+			}
+		}
+		
+		private function onTargetVideoAvailability(e:SurfacePlayerEvent):void
+		{
+			// as soon as you attach a video to the extension
+			// it will check if the target is available. you can play the
+			// video only if the file is availble of course!
+			
+			if (e.param.isAvailable) trace("video file is availble :)");
+			else trace("WRONG video file address!!! you can't play the video! " + e.param.address);
+		}
+		
+		private function onMediaStatusChanged(e:SurfacePlayerEvent):void
+		{
+			trace(e.param);
+		}
+		
+		private function onError(e:SurfacePlayerEvent):void
+		{
+			trace(e.param);
+		}
+		
+		private function onMediaInfo(e:SurfacePlayerEvent):void
+		{
+			trace(e.param);
+		}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		private function createBtn($str:String, $bgColor:uint=0xDFE4FF):MySprite
+		{
+			var sp:MySprite = new MySprite();
+			sp.addEventListener(MouseEvent.MOUSE_OVER,  onOver);
+			sp.addEventListener(MouseEvent.MOUSE_OUT,  onOut);
+			//sp.addEventListener(MouseEvent.CLICK,  onOut);
+			sp.bgAlpha = 1;
+			sp.bgColor = $bgColor;
+			sp.drawBg();
+			sp.width = BTN_WIDTH * DeviceInfo.dpiScaleMultiplier;
+			sp.height = BTN_HEIGHT * DeviceInfo.dpiScaleMultiplier;
+			
+			function onOver(e:MouseEvent):void
+			{
+				if (!sp.hasEventListener(MouseEvent.CLICK)) return;
+				
+				sp.bgAlpha = 1;
+				sp.bgColor = 0x000000;
+				sp.drawBg();
+			}
+			
+			function onOut(e:MouseEvent):void
+			{
+				if (!sp.hasEventListener(MouseEvent.CLICK)) return;
+				
+				sp.bgAlpha = 1;
+				sp.bgColor = $bgColor;
+				sp.drawBg();
+			}
+			
+			var format:TextFormat = new TextFormat("Arimo", 16, 0x888888, null, null, null, null, null, TextFormatAlign.CENTER);
+			
+			var txt:TextField = new TextField();
+			txt.autoSize = TextFieldAutoSize.LEFT;
+			txt.antiAliasType = AntiAliasType.ADVANCED;
+			txt.mouseEnabled = false;
+			txt.multiline = true;
+			txt.wordWrap = true;
+			txt.scaleX = txt.scaleY = DeviceInfo.dpiScaleMultiplier;
+			txt.width = sp.width * (1 / DeviceInfo.dpiScaleMultiplier);
+			txt.defaultTextFormat = format;
+			txt.text = $str;
+			
+			txt.y = sp.height - txt.height >> 1;
+			sp.addChild(txt);
+			
+			return sp;
+		}
+	}
+
+}
