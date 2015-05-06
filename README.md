@@ -48,5 +48,5 @@ _ex.play();
 
 // there are many other methods for you to control the video playback like pause, seek, fullscreen, set volume, etc. please study the sample demo project
 // coming with this extension to know how you can work with the other methods and when/how to dispose the extension properly.
-
+```
 This extension does not require any special setup in the air manifest .xml file
