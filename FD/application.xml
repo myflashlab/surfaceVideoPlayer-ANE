@@ -27,6 +27,36 @@
 	</application>
 </manifest>]]></manifestAdditions>
   </android>
+  <iPhone>
+    <!--https://developer.apple.com/library/ios/documentation/general/reference/infoplistkeyreference/Articles/iPhoneOSKeys.html-->
+    <!--http://help.adobe.com/en_US/air/build/WSfffb011ac560372f7e64a7f12cd2dd1867-8000.html-->
+    <!-- A list of plist key/value pairs to be added to the application Info.plist -->
+    <InfoAdditions>
+		<![CDATA[<key>MinimumOSVersion</key>
+		<string>7.1</string>
+		
+		<key>UIStatusBarStyle</key>
+		<string>UIStatusBarStyleBlackOpaque</string>
+		
+		<key>UIRequiresPersistentWiFi</key>
+		<string>NO</string>
+		
+		<key>UIFileSharingEnabled</key>
+		<string>YES</string>
+		
+		<key>UIPrerenderedIcon</key>
+		<true />
+		
+		<key>UIDeviceFamily</key>
+		<array>
+			<!-- iPhone support -->
+			<string>1</string>
+			<!-- iPad support -->
+			<string>2</string>
+		</array>]]></InfoAdditions>
+		
+    <requestedDisplayResolution>high</requestedDisplayResolution>
+  </iPhone>
   <initialWindow>
     <title>exVideoPlayerSurface</title>
     <content>exVideoPlayerSurface.swf</content>

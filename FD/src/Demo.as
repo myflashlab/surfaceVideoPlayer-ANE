@@ -42,7 +42,6 @@ package
 	
 	import com.doitflash.air.extensions.player.surface.SurfacePlayer;
 	import com.doitflash.air.extensions.player.surface.SurfacePlayerEvent;
-	import com.doitflash.air.extensions.player.surface.DeviceOrientationType;
 	
 	/**
 	 * ...
@@ -162,29 +161,23 @@ package
 			
 			if (_ex)
 			{
-				if (!_ex.isFullscreen) // do resizing only when we are NOT in fullscreen mode
-				{
-					var w:int = stage.stageWidth * 0.5;
-					var h:int = w * 0.75;
-					var x:int = w * 0.5;
-					var y:int = 50;
-					
-					_ex.setPosition(x, y, w, h, true); // ratio can be true or false
-				}
+				var w:int = stage.stageWidth * 0.5;
+				var h:int = w * 0.75;
+				var x:int = w * 0.5;
+				var y:int = 50;
+				
+				_ex.setPosition(x, y, w, h, true); // ratio can be true or false
 			}
 		}
 		
 		private function init():void
 		{
 			// initialize the extension
-			_ex = new SurfacePlayer();
+			_ex = new SurfacePlayer(this.stage);
 			_ex.addEventListener(SurfacePlayerEvent.ON_BACK_CLICKED, onBackClickedWhenSurfacePlayerIsAvailable);
-			_ex.addEventListener(SurfacePlayerEvent.ON_FULLSCREEN_STATE, onFullscreenStateChanged);
 			_ex.addEventListener(SurfacePlayerEvent.ON_COMPLETION_LISTENER, onVideoPlaybackCompleted);
 			_ex.addEventListener(SurfacePlayerEvent.ON_FILE_AVAILABILITY, onTargetVideoAvailability);
 			_ex.addEventListener(SurfacePlayerEvent.ON_MEDIA_STATUS_CHANGED, onMediaStatusChanged);
-			_ex.addEventListener(SurfacePlayerEvent.ON_ERROR, onError);
-			_ex.addEventListener(SurfacePlayerEvent.ON_INFO_LISTENER, onMediaInfo);
 			
 			// copy test video to sdcard
 			var src:File = File.applicationDirectory.resolvePath("testVideoPlayerSurface.mp4");
@@ -192,12 +185,26 @@ package
 			if (!dis.exists) src.copyTo(dis);
 			
 			trace("a demo video is copied to sdcard so we can play it back!");
-			trace("get Android SDK Version: " + _ex.androidVersion);
+			trace("is supported? " + _ex.isSupported);
 			
 			var w:int = stage.stageWidth * 0.5;
 			var h:int = w * 0.75;
 			var x:int = w * 0.5;
 			var y:int = 50;
+			
+			stage.addEventListener(Event.RESIZE, onResizeStage);
+			function onResizeStage(e:Event):void
+			{
+				w = stage.stageWidth * 0.5;
+				h = w * 0.75;
+				x = w * 0.5;
+				if (dragMe) 
+				{
+					dragMe.x = x + w;
+					dragMe.y = y + h;
+				}
+			}
+			
 			_ex.init(x, y, w, h, true); // ratio can be true or false (you can change the position and dimension later using the setPosition command)
 			
 			var file:File = File.documentsDirectory.resolvePath("testVideoPlayerSurface.mp4"); // you can play videos on your sdcard
@@ -297,26 +304,6 @@ package
 				_ex.seekTo(18619);
 			}
 			
-			// NOTICE: to go fullscreen, we recommond using this extension: http://myappsnippet.com/video-player-native-extension/
-			
-			/*var btn8:MySprite = createBtn("go fullscreen");
-			btn8.addEventListener(MouseEvent.CLICK, goFullscreen);
-			_list.add(btn8);
-			
-			function goFullscreen(e:MouseEvent):void
-			{
-				_ex.goFullscreen(true);
-			}
-			
-			var btn9:MySprite = createBtn("go normalscreen");
-			btn9.addEventListener(MouseEvent.CLICK, goNormalscreen);
-			_list.add(btn9);
-			
-			function goNormalscreen(e:MouseEvent):void
-			{
-				_ex.goFullscreen(false);
-			}*/
-			
 			/*var btn10:MySprite = createBtn("is playing?");
 			btn10.addEventListener(MouseEvent.CLICK, isPlaying);
 			_list.add(btn10);
@@ -353,35 +340,9 @@ package
 			NativeApplication.nativeApplication.exit();
 		}
 		
-		private function onFullscreenStateChanged(e:SurfacePlayerEvent):void
-		{
-			if (e.param) // means that the state is in fullscreen
-			{
-				// when going to fullscreen, you should stop your app from autoOrients
-				stage.autoOrients = false;
-				
-				// most devices are portraite by default and you can rotate it manually with no problem. on the other hand, 
-				// tablet devices are landscape by default which make the big problem so, we have fixed the problem inside the ANE exclusively
-				if (_ex.naturalOrientation == DeviceOrientationType.PORTRAITE)
-				{
-					stage.setOrientation(StageOrientation.ROTATED_RIGHT);
-				}
-			}
-			else
-			{
-				// depending on your app design, you can set the orientation to whatever suits you!
-				stage.autoOrients = false;
-			}
-		}
-		
 		private function onVideoPlaybackCompleted(e:SurfacePlayerEvent):void
 		{
 			trace("video playback finished");
-			
-			if (_ex.isFullscreen)
-			{
-				_ex.goFullscreen(false);
-			}
 		}
 		
 		private function onTargetVideoAvailability(e:SurfacePlayerEvent):void
@@ -395,16 +356,6 @@ package
 		}
 		
 		private function onMediaStatusChanged(e:SurfacePlayerEvent):void
-		{
-			trace(e.param);
-		}
-		
-		private function onError(e:SurfacePlayerEvent):void
-		{
-			trace(e.param);
-		}
-		
-		private function onMediaInfo(e:SurfacePlayerEvent):void
 		{
 			trace(e.param);
 		}
