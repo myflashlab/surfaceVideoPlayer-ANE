@@ -9,7 +9,7 @@ YouTube demo Video: https://www.youtube.com/watch?v=HefrQwCSkKE
 
 **NOTICE: the demo ANE works only after you hit the "OK" button in the dialog which opens. in your tests make sure that you are NOT calling other ANE methods prior to hitting the "OK" button.**
 
-![Surface Video Player ANE](http://myappsnippet.com/wp-content/uploads/2015/04/surface-video-player-adobe-air-extension_preview.jpg)
+![Surface Video Player ANE](http://myappsnippet.com/wp-content/uploads/2015/06/surface-video-player-adobe-air-extension_preview.jpg)
 
 # AS3 API:
 ```actionscript
