@@ -1,4 +1,4 @@
-# Surface Video Player ANE V2.0 (Android+iOS)
+# Surface Video Player ANE V2.9 (Android+iOS)
 SurfacePlayer extension lets you play video files inside your air mobile projects and you can control the position of the player by setting x, y, width and height parameters. if you need to play your videos in native players out of your app, please check out: http://myappsnippet.com/video-player-native-extension/. you may also use our YouTube link parser found here: https://github.com/myflashlab/AS3-youtube-parser-video-link/ and with that you can easily play YouTube videos too.
 
 checkout here for the commercial version: http://myappsnippet.com/surface-video-player-ane
@@ -13,8 +13,8 @@ YouTube demo Video: https://www.youtube.com/watch?v=HefrQwCSkKE
 
 # AS3 API:
 ```actionscript
-import com.doitflash.air.extensions.player.surface.SurfacePlayer;
-import com.doitflash.air.extensions.player.surface.SurfacePlayerEvent;
+import com.myflashlab.air.extensions.player.surface.SurfacePlayer;
+import com.myflashlab.air.extensions.player.surface.SurfacePlayerEvent;
 
 var _ex:SurfacePlayer = new SurfacePlayer(stage);
 

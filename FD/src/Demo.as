@@ -40,8 +40,8 @@ package
 	import com.doitflash.mobileProject.commonCpuSrc.DeviceInfo;
 	import flash.utils.setTimeout;
 	
-	import com.doitflash.air.extensions.player.surface.SurfacePlayer;
-	import com.doitflash.air.extensions.player.surface.SurfacePlayerEvent;
+	import com.myflashlab.air.extensions.player.surface.SurfacePlayer;
+	import com.myflashlab.air.extensions.player.surface.SurfacePlayerEvent;
 	
 	/**
 	 * ...

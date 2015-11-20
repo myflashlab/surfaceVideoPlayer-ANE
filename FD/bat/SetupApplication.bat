@@ -18,7 +18,7 @@ set AND_SIGNING_OPTIONS=-storetype pkcs12 -keystore "%AND_CERT_FILE%" -storepass
 set IOS_DIST_CERT_FILE=cert\certificate_dev.p12
 set IOS_DEV_CERT_FILE=cert\certificate_dev.p12
 set IOS_DEV_CERT_PASS=pass
-set IOS_PROVISION=cert\comdoitflashexSpeech.mobileprovision
+set IOS_PROVISION=cert\comDoitflash.mobileprovision
 set IOS_ICONS=icons/ios
 
 set IOS_DEV_SIGNING_OPTIONS=-hideAneLibSymbols yes -storetype pkcs12 -keystore "%IOS_DEV_CERT_FILE%" -storepass %IOS_DEV_CERT_PASS% -provisioning-profile %IOS_PROVISION%

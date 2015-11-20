@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <application xmlns="http://ns.adobe.com/air/application/15.0">
   <id>com.doitflash.exVideoPlayerSurface</id>
-  <versionNumber>1.0</versionNumber>
+  <versionNumber>2.9</versionNumber>
   <supportedProfiles>mobileDevice</supportedProfiles>
   <filename>exVideoPlayerSurface</filename>
-  <name>exVideoPlayerSurface</name>
+  <name>Surface Player</name>
   <android>
     <manifestAdditions><![CDATA[<manifest android:installLocation="auto">
 	<uses-permission android:name="android.permission.INTERNET" />
@@ -75,6 +75,6 @@
     <image512x512>icons/icon_512.png</image512x512>
   </icon>
   <extensions>
-    <extensionID>com.doitflash.air.extensions.videoPlayerSurface</extensionID>
+    <extensionID>com.myflashlab.air.extensions.videoPlayerSurface</extensionID>
   </extensions>
 </application>

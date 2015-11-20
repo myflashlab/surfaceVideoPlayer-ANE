@@ -5,3 +5,5 @@ Apr 28, 2015	>> V1.0: 	beginning of the journey!
 
 Jun 14, 2015 	>> V2.0:	added support for iOS
 				removed fullscreen option as it was adding confusion because of Android and iOS differences. for fullscreen, you can easily use http://myappsnippet.com/video-player-native-extension/
+
+Nov 03, 2015	>> V2.9:	doitflash devs merged into MyFLashLab Team.
