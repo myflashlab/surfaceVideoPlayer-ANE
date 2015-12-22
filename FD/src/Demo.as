@@ -172,6 +172,9 @@ package
 		
 		private function init():void
 		{
+			// required only if you are a member of the club
+			SurfacePlayer.clubId = "paypal-address-you-used-to-join-the-club";
+			
 			// initialize the extension
 			_ex = new SurfacePlayer(this.stage);
 			_ex.addEventListener(SurfacePlayerEvent.ON_BACK_CLICKED, onBackClickedWhenSurfacePlayerIsAvailable);
@@ -184,7 +187,7 @@ package
 			var dis:File = File.documentsDirectory.resolvePath("testVideoPlayerSurface.mp4");
 			if (!dis.exists) src.copyTo(dis);
 			
-			trace("a demo video is copied to sdcard so we can play it back!");
+			trace("a demo video is copied to documentsDirectory so we can play it back!");
 			trace("is supported? " + _ex.isSupported);
 			
 			var w:int = stage.stageWidth * 0.5;

@@ -183,9 +183,11 @@ package com.doitflash.mobileProject.commonCpuSrc
 		public static function get dpiScaleMultiplier():Number
 		{
 			var currDpi:Number = Capabilities.screenDPI;
-			var multiplier:Number = 1;
+			var multiplier:Number = currDpi / 240;
 			
-			if (currDpi <= 140)
+			if (multiplier < 1) multiplier = 1;
+			
+			/*if (currDpi <= 140)
 			{
 				multiplier = 0.75;
 			}
@@ -201,6 +203,8 @@ package com.doitflash.mobileProject.commonCpuSrc
 			{
 				multiplier = 2;
 			}
+			
+			return multiplier;*/
 			
 			return multiplier;
 		}
