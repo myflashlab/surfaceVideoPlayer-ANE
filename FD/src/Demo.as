@@ -42,6 +42,7 @@ package
 	
 	import com.myflashlab.air.extensions.player.surface.SurfacePlayer;
 	import com.myflashlab.air.extensions.player.surface.SurfacePlayerEvent;
+	import com.myflashlab.air.extensions.player.surface.SurfaceVideoLocation;
 	
 	/**
 	 * ...
@@ -102,8 +103,8 @@ package
 			_list.vDirection = Direction.TOP_TO_BOTTOM;
 			_list.space = BTN_SPACE;
 			
-			init();
-			onResize();
+			if (stage) init();
+			else addEventListener(Event.ADDED_TO_STAGE, init);
 		}
 		
 		private function onInvoke(e:InvokeEvent):void
@@ -170,24 +171,30 @@ package
 			}
 		}
 		
-		private function init():void
+		private function init(e:Event=null):void
 		{
 			// required only if you are a member of the club
 			SurfacePlayer.clubId = "paypal-address-you-used-to-join-the-club";
 			
 			// initialize the extension
-			_ex = new SurfacePlayer(this.stage);
+			_ex = new SurfacePlayer(this.stage); // make sure the stage is available.
 			_ex.addEventListener(SurfacePlayerEvent.ON_BACK_CLICKED, onBackClickedWhenSurfacePlayerIsAvailable);
 			_ex.addEventListener(SurfacePlayerEvent.ON_COMPLETION_LISTENER, onVideoPlaybackCompleted);
 			_ex.addEventListener(SurfacePlayerEvent.ON_FILE_AVAILABILITY, onTargetVideoAvailability);
 			_ex.addEventListener(SurfacePlayerEvent.ON_MEDIA_STATUS_CHANGED, onMediaStatusChanged);
 			
-			// copy test video to sdcard
+			/**
+			 * NOTICE: you can't play a video from File.applicationDirectory because AdobeAir is compressing these files on Android (we're not sure if this is a bug or Adobe is doing this on purpose. anyway, you can use applicationStorageDirectory instead)
+			 * So you have to copy it to documentsDirectory OR applicationStorageDirectory
+			 */
 			var src:File = File.applicationDirectory.resolvePath("testVideoPlayerSurface.mp4");
-			var dis:File = File.documentsDirectory.resolvePath("testVideoPlayerSurface.mp4");
+			
+			//var dis:File = File.documentsDirectory.resolvePath(src.name);
+			var dis:File = File.applicationStorageDirectory.resolvePath(src.name);
+			
+			trace("a demo video is copied to applicationStorageDirectory so we can play it back!");
 			if (!dis.exists) src.copyTo(dis);
 			
-			trace("a demo video is copied to documentsDirectory so we can play it back!");
 			trace("is supported? " + _ex.isSupported);
 			
 			var w:int = stage.stageWidth * 0.5;
@@ -208,10 +215,17 @@ package
 				}
 			}
 			
-			_ex.init(x, y, w, h, true); // ratio can be true or false (you can change the position and dimension later using the setPosition command)
+			// ratio can be true or false (you can change the position and dimension later using the setPosition command)
+			_ex.init(x, y, w, h, true); 
 			
-			var file:File = File.documentsDirectory.resolvePath("testVideoPlayerSurface.mp4"); // you can play videos on your sdcard
-			_ex.attachVideo(file);
+			/**
+			 * 	choose SurfaceVideoLocation.ON_APP if your video is in File.applicationStorageDirectory
+			 * 	OR choose SurfaceVideoLocation.ON_SD_CARD if your video is in File.documentsDirectory
+			 * 
+			 * 	NOTICE 1: When saying SurfaceVideoLocation.ON_SD_CARD we do NOT mean the actual mountable sdCard. we just mean File.documentsDirectory
+			 * 	FYI, on iOS, File.applicationStorageDirectory and File.documentsDirectory locations are the same!
+			 */
+			_ex.attachVideo(dis, SurfaceVideoLocation.ON_APP); 
 			
 			// create the dragMe button!
 			var dragMe:MySprite = new MySprite();
@@ -335,6 +349,8 @@ package
 				_ex.volume = 100; // set volume range = 0, 100
 				trace("volume = " + _ex.volume);
 			}
+			
+			onResize();
 		}
 		
 		private function onBackClickedWhenSurfacePlayerIsAvailable(e:SurfacePlayerEvent):void

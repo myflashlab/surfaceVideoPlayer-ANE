@@ -8,3 +8,6 @@ Jun 14, 2015 	>> V2.0:	added support for iOS
 
 Nov 03, 2015	>> V2.9:	doitflash devs merged into MyFLashLab Team.
 Dec 20, 2015 	>> V2.9.1: 	minor bug fixes
+
+Jan 01, 2016	>> V3.0:	in this version you can now also play videos from File.applicationStorageDirectory and you are no longer limited to File.applicationDirectory
+				when attaching a video, you need to specify its location like this: _ex.attachVideo(File.applicationStorageDirectory.resolvePath("video.mp4"), SurfaceVideoLocation.ON_APP);
