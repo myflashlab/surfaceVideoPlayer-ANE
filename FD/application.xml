@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<application xmlns="http://ns.adobe.com/air/application/19.0">
+<application xmlns="http://ns.adobe.com/air/application/20.0">
   <id>com.doitflash.exVideoPlayerSurface</id>
-  <versionNumber>2.9.1</versionNumber>
+  <versionNumber>3.1</versionNumber>
   <supportedProfiles>mobileDevice</supportedProfiles>
   <filename>exVideoPlayerSurface</filename>
   <name>Surface Player</name>
