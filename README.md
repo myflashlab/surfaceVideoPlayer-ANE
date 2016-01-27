@@ -1,17 +1,16 @@
 # Surface Video Player ANE V3.1 (Android+iOS)
 SurfacePlayer extension lets you play video files inside your air mobile projects and you can control the position of the player by setting x, y, width and height parameters. if you need to play your videos in native players out of your app, please check out: http://myappsnippet.com/video-player-native-extension/. you may also use our YouTube link parser found here: https://github.com/myflashlab/AS3-youtube-parser-video-link/ and with that you can easily play YouTube videos too. but please notice that this surface player can play local videos only, so even if you wish to play a youtube video, you need to download it first and then play it back. If you want to stream an online video though, like a YouTube video, you can again use our other fullscreen player ANE mentioned above.
 
-checkout here for the commercial version: http://myappsnippet.com/surface-video-player-ane
+# Demo .apk
+you may like to see the ANE in action? [Download demo .apk](https://github.com/myflashlab/surfaceVideoPlayer-ANE/tree/master/FD/dist) 
 
-you may like to see the ANE in action? check this out: https://github.com/myflashlab/surfaceVideoPlayer-ANE/tree/master/FD/dist
+**NOTICE**: the demo ANE works only after you hit the "OK" button in the dialog which opens. in your tests make sure that you are NOT calling other ANE methods prior to hitting the "OK" button.
+[Download the ANE](https://github.com/myflashlab/surfaceVideoPlayer-ANE/tree/master/FD/lib)
 
-YouTube demo Video: https://www.youtube.com/watch?v=HefrQwCSkKE
+# Demo Videos
+[YouTube demo of how the extension works](https://www.youtube.com/watch?v=HefrQwCSkKE) 
 
-**NOTICE: the demo ANE works only after you hit the "OK" button in the dialog which opens. in your tests make sure that you are NOT calling other ANE methods prior to hitting the "OK" button.**
-
-![Surface Video Player ANE](http://www.myflashlabs.com/wp-content/uploads/2015/11/product_adobe-air-ane-extension-surface-video-player-680x844.jpg)
-
-# AS3 API:
+# Air Usage
 ```actionscript
 import com.myflashlab.air.extensions.player.surface.SurfacePlayer;
 import com.myflashlab.air.extensions.player.surface.SurfacePlayerEvent;
@@ -44,25 +43,45 @@ _ex.play();
 // coming with this extension to know how you can work with the other methods and when/how to dispose the extension properly.
 ```
 
+# Air .xml manifest
+```xml
+<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+```
+
 # Requirements
 * Android SDK 15 or higher 
 * iOS 7.1 or higher
 
-This extension does not require any special setup in the air manifest .xml file but you should consider adding the following permission ```<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />``` if you are trying to copy files to ```File.documentsDirectory```
+# Commercial Version
+http://www.myflashlabs.com/product/surface-embedded-video-player-ane/
+
+![Surface Video Player ANE](http://www.myflashlabs.com/wp-content/uploads/2015/11/product_adobe-air-ane-extension-surface-video-player-680x844.jpg)
+
+# Tutorials
+[How to embed ANEs into **FlashBuilder**, **FlashCC** and **FlashDevelop**](https://www.youtube.com/watch?v=Oubsb_3F3ec&list=PL_mmSjScdnxnSDTMYb1iDX4LemhIJrt1O)  
 
 # Changelog
-* Apr 28, 2015	>> V1.0: 	beginning of the journey!
+*Jan 20, 2016 - V3.1*
+* bypassing xCode 7.2 bug causing iOS conflict when compiling with AirSDK 20 without waiting on Adobe or Apple to fix the problem. This is a must have upgrade for your app to make sure you can compile multiple ANEs in your project with AirSDK 20 or greater. https://forums.adobe.com/thread/2055508 https://forums.adobe.com/message/8294948
 
-* Jun 14, 2015 	>> V2.0:	added support for iOS
-  *				removed fullscreen option as it was adding confusion because of Android and iOS differences. for fullscreen, you can easily use http://myappsnippet.com/video-player-native-extension/
 
-* Nov 03, 2015	>> V2.9:	doitflash devs merged into MyFLashLab Team.
-* Dec 20, 2015 	>> V2.9.1: 	minor bug fixes
+*Jan 01, 2016 - V3.0*
+* in this version you can now also play videos from File.applicationStorageDirectory and you are no longer limited to File.applicationDirectory
+* when attaching a video, you need to specify its location like this: _ex.attachVideo(File.applicationStorageDirectory.resolvePath("video.mp4"), SurfaceVideoLocation.ON_APP);
 
-* Jan 01, 2016	>> V3.0:	in this version you can now also play videos from File.applicationStorageDirectory and you are no longer limited to File.applicationDirectory
-  *				when attaching a video, you need to specify its location like this: _ex.attachVideo(File.applicationStorageDirectory.resolvePath("video.mp4"), SurfaceVideoLocation.ON_APP);
-				
-* Jan 20, 2016 	>> V3.1: 	bypassing xCode 7.2 bug causing iOS conflict when compiling with AirSDK 20 without waiting on Adobe or Apple to fix the problem.
-  *							This is a must have upgrade for your app to make sure you can compile multiple ANEs in your project with AirSDK 20 or greater.
-  *							https://forums.adobe.com/thread/2055508
-  *							https://forums.adobe.com/message/8294948
+
+*Dec 20, 2015 - V2.9.1*
+* minor bug fixes
+
+
+*Nov 03, 2015 - V2.9*
+* doitflash devs merged into MyFLashLab Team
+
+
+*Jun 14, 2015 - V2.0*
+* added support for iOS
+* removed fullscreen option as it was adding confusion because of Android and iOS differences. for fullscreen, you can easily use http://myappsnippet.com/video-player-native-extension/
+
+
+*Apr 28, 2015 - V1.0*
+* beginning of the journey!

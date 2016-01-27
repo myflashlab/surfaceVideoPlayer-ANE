@@ -1,18 +1,26 @@
 Surface Video Player Adobe Air Native Extension
 
+*Jan 20, 2016 - V3.1*
+* bypassing xCode 7.2 bug causing iOS conflict when compiling with AirSDK 20 without waiting on Adobe or Apple to fix the problem. This is a must have upgrade for your app to make sure you can compile multiple ANEs in your project with AirSDK 20 or greater. https://forums.adobe.com/thread/2055508 https://forums.adobe.com/message/8294948
 
-Apr 28, 2015	>> V1.0: 	beginning of the journey!
 
-Jun 14, 2015 	>> V2.0:	added support for iOS
-				removed fullscreen option as it was adding confusion because of Android and iOS differences. for fullscreen, you can easily use http://myappsnippet.com/video-player-native-extension/
+*Jan 01, 2016 - V3.0*
+* in this version you can now also play videos from File.applicationStorageDirectory and you are no longer limited to File.applicationDirectory
+* when attaching a video, you need to specify its location like this: _ex.attachVideo(File.applicationStorageDirectory.resolvePath("video.mp4"), SurfaceVideoLocation.ON_APP);
 
-Nov 03, 2015	>> V2.9:	doitflash devs merged into MyFLashLab Team.
-Dec 20, 2015 	>> V2.9.1: 	minor bug fixes
 
-Jan 01, 2016	>> V3.0:	in this version you can now also play videos from File.applicationStorageDirectory and you are no longer limited to File.applicationDirectory
-				when attaching a video, you need to specify its location like this: _ex.attachVideo(File.applicationStorageDirectory.resolvePath("video.mp4"), SurfaceVideoLocation.ON_APP);
-				
-Jan 20, 2016 	>> V3.1: 	bypassing xCode 7.2 bug causing iOS conflict when compiling with AirSDK 20 without waiting on Adobe or Apple to fix the problem.
-							This is a must have upgrade for your app to make sure you can compile multiple ANEs in your project with AirSDK 20 or greater.
-							https://forums.adobe.com/thread/2055508
-							https://forums.adobe.com/message/8294948
+*Dec 20, 2015 - V2.9.1*
+* minor bug fixes
+
+
+*Nov 03, 2015 - V2.9*
+* doitflash devs merged into MyFLashLab Team
+
+
+*Jun 14, 2015 - V2.0*
+* added support for iOS
+* removed fullscreen option as it was adding confusion because of Android and iOS differences. for fullscreen, you can easily use http://myappsnippet.com/video-player-native-extension/
+
+
+*Apr 28, 2015 - V1.0*
+* beginning of the journey!
