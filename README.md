@@ -48,7 +48,13 @@ _ex.attachVideo(File.applicationStorageDirectory.resolvePath("testVideoPlayerSur
 
 # Air .xml manifest
 ```xml
-<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+<!--
+Embedding the ANE:
+-->
+  <extensions>
+    <extensionID>com.myflashlab.air.extensions.videoPlayerSurface</extensionID>
+  </extensions>
+-->
 ```
 
 # Requirements
