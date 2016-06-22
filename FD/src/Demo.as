@@ -51,6 +51,9 @@ package
 	public class Demo extends Sprite
 	{
 		private var _ex:SurfacePlayer;
+		private var dragMe:MySprite;
+		private var _videoWidth:int;
+		private var _videoHeigh:int;
 		
 		private const BTN_WIDTH:Number = 110;
 		private const BTN_HEIGHT:Number = 60;
@@ -103,8 +106,9 @@ package
 			_list.vDirection = Direction.TOP_TO_BOTTOM;
 			_list.space = BTN_SPACE;
 			
-			if (stage) init();
-			else addEventListener(Event.ADDED_TO_STAGE, init);
+			C.log("iOS is crazy with understanding stageWidth and stageHeight, you already now that :)");
+			C.log("So, we should wait a couple of seconds before initializing the ANE to make sure the stage dimention is stable before passing it through the ANE.");
+			setTimeout(init, 2000);
 		}
 		
 		private function onInvoke(e:InvokeEvent):void
@@ -162,20 +166,23 @@ package
 			
 			if (_ex)
 			{
-				var w:int = stage.stageWidth * 0.5;
-				var h:int = w * 0.75;
-				var x:int = w * 0.5;
-				var y:int = 50;
+				_videoWidth = stage.stageWidth * 0.5;
+				_videoHeigh = _videoWidth * 0.75;
+				var x:int = stage.stageWidth * 0.5 - _videoWidth * 0.5;
+				var y:int = stage.stageHeight * 0.5 - _videoHeigh * 0.5;
 				
-				_ex.setPosition(x, y, w, h, true); // ratio can be true or false
+				if (dragMe) 
+				{
+					dragMe.x = x + _videoWidth;
+					dragMe.y = y + _videoHeigh;
+				}
+				
+				_ex.setPosition(x, y, _videoWidth, _videoHeigh, true); // ratio can be true or false
 			}
 		}
 		
-		private function init(e:Event=null):void
+		private function init():void
 		{
-			// required only if you are a member of the club
-			SurfacePlayer.clubId = "paypal-address-you-used-to-join-the-club";
-			
 			// initialize the extension
 			_ex = new SurfacePlayer(this.stage); // make sure the stage is available.
 			_ex.addEventListener(SurfacePlayerEvent.ON_BACK_CLICKED, onBackClickedWhenSurfacePlayerIsAvailable);
@@ -184,7 +191,9 @@ package
 			_ex.addEventListener(SurfacePlayerEvent.ON_MEDIA_STATUS_CHANGED, onMediaStatusChanged);
 			
 			/**
-			 * NOTICE: you can't play a video from File.applicationDirectory because AdobeAir is compressing these files on Android (we're not sure if this is a bug or Adobe is doing this on purpose. anyway, you can use applicationStorageDirectory instead)
+			 * NOTICE: you can't play a video from File.applicationDirectory because AdobeAir is compressing these files on Android 
+			 * (we're not sure if this is a bug or Adobe is doing this on purpose. anyway, you can use applicationStorageDirectory instead)
+			 * 
 			 * So you have to copy it to documentsDirectory OR applicationStorageDirectory
 			 */
 			var src:File = File.applicationDirectory.resolvePath("testVideoPlayerSurface.mp4");
@@ -197,38 +206,25 @@ package
 			
 			trace("is supported? " + _ex.isSupported);
 			
-			var w:int = stage.stageWidth * 0.5;
-			var h:int = w * 0.75;
-			var x:int = w * 0.5;
-			var y:int = 50;
-			
-			stage.addEventListener(Event.RESIZE, onResizeStage);
-			function onResizeStage(e:Event):void
-			{
-				w = stage.stageWidth * 0.5;
-				h = w * 0.75;
-				x = w * 0.5;
-				if (dragMe) 
-				{
-					dragMe.x = x + w;
-					dragMe.y = y + h;
-				}
-			}
+			_videoWidth = stage.stageWidth * 0.5;
+			_videoHeigh = _videoWidth * 0.75;
+			var x:int = stage.stageWidth * 0.5 - _videoWidth * 0.5;
+			var y:int = stage.stageHeight * 0.5 - _videoHeigh * 0.5;
 			
 			// ratio can be true or false (you can change the position and dimension later using the setPosition command)
-			_ex.init(x, y, w, h, true); 
+			_ex.init(x, y, _videoWidth, _videoHeigh, true); 
 			
 			/**
 			 * 	choose SurfaceVideoLocation.ON_APP if your video is in File.applicationStorageDirectory
 			 * 	OR choose SurfaceVideoLocation.ON_SD_CARD if your video is in File.documentsDirectory
 			 * 
 			 * 	NOTICE 1: When saying SurfaceVideoLocation.ON_SD_CARD we do NOT mean the actual mountable sdCard. we just mean File.documentsDirectory
-			 * 	FYI, on iOS, File.applicationStorageDirectory and File.documentsDirectory locations are the same!
+			 * 	FYI, on iOS, File.applicationStorageDirectory and File.documentsDirectory locations are basically the same!
 			 */
 			_ex.attachVideo(dis, SurfaceVideoLocation.ON_APP); 
 			
 			// create the dragMe button!
-			var dragMe:MySprite = new MySprite();
+			dragMe = new MySprite();
 			dragMe.addEventListener(MouseEvent.MOUSE_DOWN, onDown);
 			dragMe.width = 100;
 			dragMe.height = 100;
@@ -238,8 +234,8 @@ package
 			dragMe.bgBottomRightRadius = 10;
 			dragMe.bgTopRightRadius = 10;
 			dragMe.drawBg();
-			dragMe.x = x + w;
-			dragMe.y = y + h;
+			dragMe.x = x + _videoWidth;
+			dragMe.y = y + _videoHeigh;
 			
 			var dragtxt:TextField = new TextField();
 			dragtxt.selectable = false;
@@ -253,25 +249,6 @@ package
 			dragMe.addChild(dragtxt);
 			
 			this.addChild(dragMe);
-			
-			function onDown(e:MouseEvent):void
-			{
-				dragMe.addEventListener(MouseEvent.MOUSE_MOVE, onMove);
-				stage.addEventListener(MouseEvent.MOUSE_UP, onUp);
-				dragMe.startDrag();
-			}
-			
-			function onMove(e:MouseEvent):void
-			{
-				_ex.setPosition(dragMe.x - w, dragMe.y - h, w, h, true);
-			}
-			
-			function onUp(e:MouseEvent):void
-			{
-				dragMe.removeEventListener(MouseEvent.MOUSE_MOVE, onMove);
-				stage.removeEventListener(MouseEvent.MOUSE_UP, onUp);
-				dragMe.stopDrag();
-			}
 			
 			
 			/*var btn02:MySprite = createBtn("detachVideo!");
@@ -378,6 +355,30 @@ package
 		{
 			trace(e.param);
 		}
+		
+		private function onDown(e:MouseEvent):void
+		{
+			dragMe.addEventListener(MouseEvent.MOUSE_MOVE, onMove);
+			stage.addEventListener(MouseEvent.MOUSE_UP, onUp);
+			dragMe.startDrag();
+		}
+			
+		private function onMove(e:MouseEvent):void
+		{
+			_ex.setPosition(dragMe.x - _videoWidth, dragMe.y - _videoHeigh, _videoWidth, _videoHeigh, true);
+		}
+		
+		private function onUp(e:MouseEvent):void
+		{
+			dragMe.removeEventListener(MouseEvent.MOUSE_MOVE, onMove);
+			stage.removeEventListener(MouseEvent.MOUSE_UP, onUp);
+			dragMe.stopDrag();
+		}
+		
+		
+		
+		
+		
 		
 		
 		
