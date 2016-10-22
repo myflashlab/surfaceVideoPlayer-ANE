@@ -1,5 +1,8 @@
 Surface Video Player Adobe Air Native Extension
 
+*Oct 22, 2016 - V3.3.0*
+* Added Touch events over the native player.
+
 *Jun 22, 2016 - V3.2.0*
 * Fixed video location when app auto rotate is on
 * Fixed the 'video not showing' problem happening on some older iOS devices

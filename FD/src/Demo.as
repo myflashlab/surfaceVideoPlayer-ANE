@@ -12,6 +12,7 @@ package
 	import flash.events.StageOrientationEvent;
 	import flash.events.StatusEvent;
 	import flash.display.LoaderInfo;
+	import flash.geom.Point;
 	import flash.system.LoaderContext;
 	import flash.text.AntiAliasType;
 	import flash.text.AutoCapitalize;
@@ -189,6 +190,11 @@ package
 			_ex.addEventListener(SurfacePlayerEvent.ON_COMPLETION_LISTENER, onVideoPlaybackCompleted);
 			_ex.addEventListener(SurfacePlayerEvent.ON_FILE_AVAILABILITY, onTargetVideoAvailability);
 			_ex.addEventListener(SurfacePlayerEvent.ON_MEDIA_STATUS_CHANGED, onMediaStatusChanged);
+			
+			// listeners for touch events over the native window.
+			_ex.addEventListener(SurfacePlayerEvent.ON_TOUCH_DOWN, onNativeTouchDown);
+			_ex.addEventListener(SurfacePlayerEvent.ON_TOUCH_MOVE, onNativeTouchMove);
+			_ex.addEventListener(SurfacePlayerEvent.ON_TOUCH_UP, onNativeTouchUp);
 			
 			/**
 			 * NOTICE: you can't play a video from File.applicationDirectory because AdobeAir is compressing these files on Android 
@@ -374,6 +380,45 @@ package
 			stage.removeEventListener(MouseEvent.MOUSE_UP, onUp);
 			dragMe.stopDrag();
 		}
+		
+		private function onNativeTouchDown(e:SurfacePlayerEvent):void
+		{
+			var globalPosition:Point = e.param.global;
+			var localPosition:Point = e.param.local;
+			
+			trace("----------------");
+			trace("onNativeTouchDown");
+			trace("global Position = " + globalPosition.x + "," + globalPosition.y);
+			trace("local Position = " + localPosition.x + "," + localPosition.y);
+			trace("----------------");
+		}
+		
+		private function onNativeTouchMove(e:SurfacePlayerEvent):void
+		{
+			var globalPosition:Point = e.param.global;
+			var localPosition:Point = e.param.local;
+			
+			trace("----------------");
+			trace("onNativeTouchMove");
+			trace("global Position = " + globalPosition.x + "," + globalPosition.y);
+			trace("local Position = " + localPosition.x + "," + localPosition.y);
+			trace("----------------");
+		}
+		
+		private function onNativeTouchUp(e:SurfacePlayerEvent):void
+		{
+			var globalPosition:Point = e.param.global;
+			var localPosition:Point = e.param.local;
+			
+			trace("----------------");
+			trace("onNativeTouchUp");
+			trace("global Position = " + globalPosition.x + "," + globalPosition.y);
+			trace("local Position = " + localPosition.x + "," + localPosition.y);
+			trace("----------------");
+		}
+		
+		
+		
 		
 		
 		

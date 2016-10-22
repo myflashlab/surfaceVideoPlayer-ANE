@@ -13,8 +13,8 @@ call bat\SetupApp.bat
 ::goto android-test
 ::goto android-captive
 set INTERPRETER=-interpreter
-::goto ios-debug
-goto ios-test
+goto ios-debug
+::goto ios-test
 
 :desktop
 :: http://help.adobe.com/en_US/air/build/WSfffb011ac560372f-6fa6d7e0128cca93d31-8000.html
