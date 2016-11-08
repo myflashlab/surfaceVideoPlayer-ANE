@@ -1,4 +1,4 @@
-# Surface Video Player ANE V3.3.0 (Android+iOS)
+# Surface Video Player ANE V3.4.0 (Android+iOS)
 SurfacePlayer extension lets you play video files inside your air mobile projects and you can control the position of the player by setting x, y, width and height parameters. if you need to play your videos in native players out of your app, please check out: http://myappsnippet.com/video-player-native-extension/. you may also use our YouTube link parser found here: https://github.com/myflashlab/AS3-youtube-parser-video-link/ and with that you can easily play YouTube videos too. but please notice that this surface player can play local videos only, so even if you wish to play a youtube video, you need to download it first and then play it back. If you want to stream an online video though, like a YouTube video, you can again use our other fullscreen player ANE mentioned above.
 
 # asdoc
@@ -13,7 +13,9 @@ you may like to see the ANE in action? [Download demo .apk](https://github.com/m
 # Demo Videos
 [YouTube demo of how the extension works](https://www.youtube.com/watch?v=HefrQwCSkKE) 
 
-# Air Usage
+# AIR Usage
+For the complete AS3 code usage, see the [demo project here](https://github.com/myflashlab/surfaceVideoPlayer-ANE/blob/master/FD/src/Demo.as).
+
 ```actionscript
 import com.myflashlab.air.extensions.player.surface.SurfacePlayer;
 import com.myflashlab.air.extensions.player.surface.SurfacePlayerEvent;
@@ -52,14 +54,32 @@ _ex.attachVideo(File.applicationStorageDirectory.resolvePath("testVideoPlayerSur
 Embedding the ANE:
 -->
   <extensions>
-    <extensionID>com.myflashlab.air.extensions.videoPlayerSurface</extensionID>
+  
+	<extensionID>com.myflashlab.air.extensions.videoPlayerSurface</extensionID>
+	
+	<!-- The following dependency ANEs are only required when compiling for Android -->
+	<extensionID>com.myflashlab.air.extensions.dependency.androidSupport</extensionID>
+	<extensionID>com.myflashlab.air.extensions.dependency.overrideAir</extensionID>
+	
   </extensions>
 -->
 ```
 
 # Requirements
+* This ANE is dependent on **androidSupport.ane** and **overrideAir.ane**. Download them from [here](https://github.com/myflashlab/common-dependencies-ANE).
 * Android SDK 15 or higher 
 * iOS 7.1 or higher
+
+# Permissions
+If you are targeting AIR 24 or higher, you need to [take care of the permissions mannually](http://www.myflashlabs.com/adobe-air-app-permissions-android-ios/). Below are the list of Permissions this ANE might require. (Note: *Necessary Permissions* are those that the ANE will NOT work without them and *Optional Permissions* are those which are needed only if you are using some specific features in the ANE.)
+
+Check out the demo project available at this repository to see how we have used our [PermissionCheck ANE](http://www.myflashlabs.com/product/native-access-permission-check-settings-menu-air-native-extension/) to ask for the permissions.
+
+**Necessary Permissions:**  
+none
+
+**Optional Permissions:**  
+2. PermissionCheck.SOURCE_STORAGE
 
 # Commercial Version
 http://www.myflashlabs.com/product/surface-embedded-video-player-ane/
@@ -70,6 +90,11 @@ http://www.myflashlabs.com/product/surface-embedded-video-player-ane/
 [How to embed ANEs into **FlashBuilder**, **FlashCC** and **FlashDevelop**](https://www.youtube.com/watch?v=Oubsb_3F3ec&list=PL_mmSjScdnxnSDTMYb1iDX4LemhIJrt1O)  
 
 # Changelog
+*Nov 08, 2016 - V3.4.0*
+* Optimized for Android manual permissions if you are targeting AIR SDK 24+
+* From now on, this ANE will depend on androidSupport.ane and overrideAir.ane on the Android side
+
+
 *Oct 22, 2016 - V3.3.0*
 * Added Touch events over the native player.
 

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<application xmlns="http://ns.adobe.com/air/application/20.0">
+<application xmlns="http://ns.adobe.com/air/application/24.0">
   <id>com.doitflash.exVideoPlayerSurface</id>
   <versionNumber>3.3.0</versionNumber>
   <supportedProfiles>mobileDevice</supportedProfiles>
@@ -8,25 +8,29 @@
   <android>
     <manifestAdditions><![CDATA[<manifest android:installLocation="auto">
 		
-	<uses-permission android:name="android.permission.INTERNET" />
-	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+		<uses-permission android:name="android.permission.INTERNET" />
+		<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+		<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+	
+		<!--The new Permission thing on Android works ONLY if you are targetting Android SDK 23 or higher-->
+		<uses-sdk android:targetSdkVersion="23"/>
+	
+		<application>
+			
+			<activity>
+				<intent-filter>
+					<action android:name="android.intent.action.MAIN" />
+					<category android:name="android.intent.category.LAUNCHER" />
+				</intent-filter>
+				<intent-filter>
+					<action android:name="android.intent.action.VIEW" />
+					<category android:name="android.intent.category.BROWSABLE" />
+					<category android:name="android.intent.category.DEFAULT" />
+				</intent-filter>
+			</activity>
+			
+		</application>
 		
-	<application>
-		
-		<activity>
-			<intent-filter>
-				<action android:name="android.intent.action.MAIN" />
-				<category android:name="android.intent.category.LAUNCHER" />
-			</intent-filter>
-			<intent-filter>
-				<action android:name="android.intent.action.VIEW" />
-				<category android:name="android.intent.category.BROWSABLE" />
-				<category android:name="android.intent.category.DEFAULT" />
-			</intent-filter>
-		</activity>
-		
-	</application>
 </manifest>]]></manifestAdditions>
   </android>
   <iPhone>
@@ -82,6 +86,12 @@
     <!--<image512x512>icons/icon_512.png</image512x512>-->
   </icon>
   <extensions>
-    <extensionID>com.myflashlab.air.extensions.videoPlayerSurface</extensionID>
+	
+	<extensionID>com.myflashlab.air.extensions.videoPlayerSurface</extensionID>
+	
+	<!-- The following dependency ANEs are only required when compiling for Android -->
+	<extensionID>com.myflashlab.air.extensions.dependency.androidSupport</extensionID>
+	<extensionID>com.myflashlab.air.extensions.dependency.overrideAir</extensionID>
+	
   </extensions>
 </application>
