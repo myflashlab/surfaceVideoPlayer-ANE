@@ -79,7 +79,8 @@ Check out the demo project available at this repository to see how we have used 
 none
 
 **Optional Permissions:**  
-2. PermissionCheck.SOURCE_STORAGE
+
+1. PermissionCheck.SOURCE_STORAGE
 
 # Commercial Version
 http://www.myflashlabs.com/product/surface-embedded-video-player-ane/
