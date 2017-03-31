@@ -1,5 +1,10 @@
 Surface Video Player Adobe Air Native Extension
 
+*Mar 30, 2017 - V3.4.1*
+* Updated the ANE with the latest overrideAir and you will need this dependency for iOS builds also.
+* Min iOS version to support this ANE is 8.0 from now on.
+* Fixed Android 7 bug which was freezing the video playback when returning to the app from home screen.
+
 *Nov 08, 2016 - V3.4.0*
 * Optimized for Android manual permissions if you are targeting AIR SDK 24+
 * From now on, this ANE will depend on androidSupport.ane and overrideAir.ane on the Android side
