@@ -1,5 +1,8 @@
 Surface Video Player Adobe Air Native Extension
 
+*Dec 15, 2017 - V3.4.2*
+* Optimized for [ANE-LAB software](https://github.com/myflashlab/ANE-LAB).
+
 *Mar 30, 2017 - V3.4.1*
 * Updated the ANE with the latest overrideAir and you will need this dependency for iOS builds also.
 * Min iOS version to support this ANE is 8.0 from now on.
