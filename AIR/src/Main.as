@@ -5,17 +5,11 @@ package
 	import flash.display.BitmapData;
 	import flash.display.Sprite;
 	import flash.display.StageAlign;
-	import flash.display.StageOrientation;
 	import flash.display.StageScaleMode;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
-	import flash.events.StageOrientationEvent;
-	import flash.events.StatusEvent;
-	import flash.display.LoaderInfo;
 	import flash.geom.Point;
-	import flash.system.LoaderContext;
 	import flash.text.AntiAliasType;
-	import flash.text.AutoCapitalize;
 	import flash.text.TextField;
 	import flash.text.TextFieldAutoSize;
 	import flash.text.TextFormat;
@@ -26,11 +20,6 @@ package
 	import flash.events.KeyboardEvent;
 	import flash.events.InvokeEvent;
 	import flash.filesystem.File;
-	import flash.utils.ByteArray;
-	import flash.media.Sound;
-    import flash.media.SoundChannel;
-	import flash.net.URLLoader;
-	import flash.display.Loader;
 	import com.doitflash.text.modules.MySprite;
 	import com.doitflash.starling.utils.list.List;
 	import com.doitflash.consts.Direction;
@@ -41,9 +30,8 @@ package
 	import com.doitflash.mobileProject.commonCpuSrc.DeviceInfo;
 	import flash.utils.setTimeout;
 	
-	import com.myflashlab.air.extensions.player.surface.SurfacePlayer;
-	import com.myflashlab.air.extensions.player.surface.SurfacePlayerEvent;
-	import com.myflashlab.air.extensions.player.surface.SurfaceVideoLocation;
+	import com.myflashlab.air.extensions.player.surface.*;
+	import com.myflashlab.air.extensions.dependency.OverrideAir;
 	
 	/**
 	 * ...
@@ -182,8 +170,16 @@ package
 			}
 		}
 		
+		private function myDebuggerDelegate($ane:String, $class:String, $msg:String):void
+		{
+			trace("\t\t" + $ane + ": " + $msg);
+		}
+		
 		private function init():void
 		{
+			// remove this line in production build or pass null as the delegate
+			OverrideAir.enableDebugger(myDebuggerDelegate);
+			
 			// initialize the extension
 			_ex = new SurfacePlayer(this.stage); // make sure the stage is available.
 			_ex.addEventListener(SurfacePlayerEvent.ON_BACK_CLICKED, onBackClickedWhenSurfacePlayerIsAvailable);
@@ -210,7 +206,7 @@ package
 			trace("a demo video is copied to applicationStorageDirectory so we can play it back!");
 			if (!dis.exists) src.copyTo(dis);
 			
-			trace("is supported? " + _ex.isSupported);
+			trace("is supported? " + _ex.isSupported());
 			
 			_videoWidth = stage.stageWidth * 0.5;
 			_videoHeigh = _videoWidth * 0.75;

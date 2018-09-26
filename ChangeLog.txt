@@ -1,5 +1,8 @@
 Surface Video Player Adobe Air Native Extension
 
+*Sep 24, 2018 - V3.4.3*
+* Removed androidSupport dependency
+
 *Dec 15, 2017 - V3.4.2*
 * Optimized for [ANE-LAB software](https://github.com/myflashlab/ANE-LAB).
 
