@@ -1,5 +1,9 @@
 Surface Video Player Adobe Air Native Extension
 
+*Nov 18, 2018 - V3.4.4*
+* Works with OverrideAir ANE V5.6.1 or higher
+* Works with ANELAB V1.1.26 or higher
+
 *Sep 24, 2018 - V3.4.3*
 * Removed androidSupport dependency
 

@@ -1,4 +1,4 @@
-# Surface Video Player ANE V3.4.3 (Android+iOS)
+# Surface Video Player ANE V3.4.4 (Android+iOS)
 SurfacePlayer extension lets you play video files inside your air mobile projects and you can control the position of the player by setting x, y, width and height parameters. if you need to play your videos in native players out of your app, please check out: https://github.com/myflashlab/videoPlayer-ANE. you may also use our YouTube link parser found here: https://github.com/myflashlab/AS3-youtube-parser-video-link/ and with that you can easily play YouTube videos too. but **please notice that this surface player can play local videos only**, so even if you wish to play a youtube video, you need to download it first and then play it back. If you want to stream an online video though, like a YouTube video, you can again use our other fullscreen player ANE mentioned above.
 
 # asdoc
@@ -79,6 +79,10 @@ http://www.myflashlabs.com/product/surface-embedded-video-player-ane/
 [How to embed ANEs into **FlashBuilder**, **FlashCC** and **FlashDevelop**](https://www.youtube.com/watch?v=Oubsb_3F3ec&list=PL_mmSjScdnxnSDTMYb1iDX4LemhIJrt1O)  
 
 # Changelog
+*Nov 18, 2018 - V3.4.4*
+* Works with OverrideAir ANE V5.6.1 or higher
+* Works with ANELAB V1.1.26 or higher
+
 *Sep 24, 2018 - V3.4.3*
 * Removed androidSupport dependency
 
