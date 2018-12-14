@@ -170,15 +170,13 @@ package
 			}
 		}
 		
-		private function myDebuggerDelegate($ane:String, $class:String, $msg:String):void
-		{
-			trace("\t\t" + $ane + ": " + $msg);
-		}
-		
 		private function init():void
 		{
-			// remove this line in production build or pass null as the delegate
-			OverrideAir.enableDebugger(myDebuggerDelegate);
+			// Remove OverrideAir debugger in production builds
+			OverrideAir.enableDebugger(function ($ane:String, $class:String, $msg:String):void
+			{
+				trace($ane+" ("+$class+") "+$msg);
+			});
 			
 			// initialize the extension
 			_ex = new SurfacePlayer(this.stage); // make sure the stage is available.
