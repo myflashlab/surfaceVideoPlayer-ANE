@@ -1,4 +1,8 @@
-Surface Video Player Adobe Air Native Extension
+# Surface Video Player Adobe Air Native Extension
+
+*Aug 04, 2020 - v4.0.0*
+- Updgrade dependencies to the latest versions.
+- Fixed some minor issues and some refactoring on native codes.
 
 *Aug 4, 2019 - V3.4.41*
 * Added Android 64-bit support
